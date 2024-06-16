@@ -1,0 +1,117 @@
+
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
+local Window = OrionLib:MakeWindow({Name="Tapping Legends Finale",HidePremium=false,IntroText="Cool Hub",SaveConfig=true,ConfigFolder="OrionTest"});
+
+local MainTab = Window:MakeTab({Name="Main",Icon="rbxassetid://4483345998",PremiumOnly=false});
+local UPGRADES = Window:MakeTab({Name="Main",Icon="rbxassetid://4483345998",PremiumOnly=false});
+
+MainTab:AddParagraph("This Game Can Ban You Easily","If you get banned it will be your fault for using cheats")
+MainTab:AddLabel("Owner : Akira(normalpersonondic0rd)")
+
+--maintabs functions
+-- Upgrade names table
+local upgradeNames = {
+    coins = {
+        "MagnetUpgrade00",
+        "MagnetUpgrade01",
+        "MagnetUpgrade02",
+        "MagnetUpgrade03",
+        "MagnetUpgrade04",
+        "MagnetUpgrade05",
+        "MagnetUpgrade06"
+    },
+    gems = {
+        "BackpackUpgrade00",
+        "BackpackUpgrade01",
+        "BackpackUpgrade02",
+        "BackpackUpgrade03",
+        "BackpackUpgrade04",
+        "BackpackUpgrade05",
+        "BackpackUpgrade06",
+        "EquippedUpgrade00",
+        "EquippedUpgrade01",
+        "EquippedUpgrade02"
+    }
+}
+
+-- Auto collect function
+function docollect()
+    while getgenv().collect do
+        local args = { [1] = 100 }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Currency"):WaitForChild("PickedUpCurrency"):FireServer(unpack(args))
+        args = { [1] = 100 }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Currency"):WaitForChild("PickedUpGems"):FireServer(unpack(args))
+        args = { [1] = 100 }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("DropItems"):WaitForChild("DropItemPickedUp"):FireServer(unpack(args))
+        wait()
+    end
+end
+
+-- Auto buy coins upgrade function
+function doUpgradescoins()
+    if getgenv().upgradecoinups then
+        for _, upgradeName in pairs(upgradeNames.coins) do
+            local args = { [1] = upgradeName }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Upgrades"):WaitForChild("RequestUnlockUpgrade"):FireServer(unpack(args))
+            wait(0.5)
+        end
+    end
+end
+
+-- Auto buy gems upgrade function
+function doUpgradesgems()
+    while getgenv().upgradegemsups do
+        for _, upgradeName in pairs(upgradeNames.gems) do
+            local args = { [1] = upgradeName }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Upgrades"):WaitForChild("RequestUnlockUpgrade"):FireServer(unpack(args))
+            wait(0.5)
+        end
+    end
+end
+
+-- Auto buy all upgrades function
+function doUpgradesAll()
+    while getgenv().upgradeall do
+        for _, upgradeName in pairs(upgradeNames.coins) do
+            local args = { [1] = upgradeName }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Upgrades"):WaitForChild("RequestUnlockUpgrade"):FireServer(unpack(args))
+            wait(0.5)
+        end
+        for _, upgradeName in pairs(upgradeNames.gems) do
+            local args = { [1] = upgradeName }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Upgrades"):WaitForChild("RequestUnlockUpgrade"):FireServer(unpack(args))
+            wait(0.5)
+        end
+    end
+end
+
+--main tab
+
+MainTab:AddToggle({Name="Auto Collect",Default=false,Callback=function(bool)
+	getgenv().click = bool;
+	if bool then
+		docollect();
+	end
+end});
+
+--upgrade misc
+UPGRADES:AddToggle({Name="Auto Buy Coins Upgrade(Magnet)",Default=false,Callback=function(bool)
+	getgenv().upgradecoinups = bool;
+	if bool then
+		doUpgradescoins();
+	end
+end});
+
+UPGRADES:AddToggle({Name="Auto Buy Gem Upgrades(Storage,Pet Equip)",Default=false,Callback=function(bool)
+	getgenv().upgradegemsups = bool;
+	if bool then
+		doUpgradesgems();
+	end
+end});
+
+UPGRADES:AddToggle({Name="Auto Buy All",Default=false,Callback=function(bool)
+	getgenv().upgradeall = bool;
+	if bool then
+		doUpgradesAll();
+	end
+end});
